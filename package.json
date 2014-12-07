@@ -1,0 +1,17 @@
+{
+  "name": "ngify",
+  "version": "0.0.0",
+  "description": "Browserify transform for angular templates",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "author": "majgis",
+  "license": "MIT",
+  "dependencies": {
+    "through": "~2.3.6",
+    "string": "~2.2.0",
+    "html-minifier": "~0.6.9",
+    "q": "~1.1.2"
+  }
+}
