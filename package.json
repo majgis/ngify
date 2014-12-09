@@ -12,7 +12,8 @@
     "through": "~2.3.6",
     "string": "~2.2.0",
     "html-minifier": "~0.6.9",
-    "q": "~1.1.2"
+    "q": "~1.1.2",
+    "extend": "~2.0.0"
   },
   "devDependencies": {
     "jasmine-node": "~1.14.5"
