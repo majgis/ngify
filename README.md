@@ -48,13 +48,50 @@ Where the following values are filled in:
     1. The file name with extension
 
 * {{html}}
-    1. The contents of the file minimized using html-minifier
-
+    1. The contents of the file minimized using html-minifier, here are the
+    default arguments:
 
         {
             collapseWhitespace: true,
             conservativeCollapse: true
         }
+
+Configuration
+---
+The following configuration can be set in package.json:
+
+
+        "ngify": {
+            "minifyArgs": {
+                collapseWhitespace: true,
+                conservativeCollapse: true
+            },
+
+        "moduleName":"MyModuleName"
+
+
+The default for minifyArgs is shown.  Anything you set will completely
+override this default.
+
+The module name is taken from:
+1. ngify.moduleName in package.json
+2. name in package.json
+3. folder name
+
+
+Hack
+---
+There is one questionable feature that allows you to not define a package.json
+but still use this transform.
+
+This transform recognizes index.js as a module and will use the folder name for
+the moduleName if package.json is missing.
+
+Browserify will not apply the transform if the package is imported, but if you
+import the index file, it will work:
+
+
+    require("myModule/index")
 
 Execute Tests
 ---

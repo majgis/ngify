@@ -12,6 +12,8 @@ describe('ngifyTransform', function () {
     });
 
     it('calls queue with the transformed data when end is called', function () {
+
+        //TODO: test async
         stream.queue = function(chunk){
             if (chunk)
                 console.log(chunk);
