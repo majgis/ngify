@@ -40,9 +40,9 @@ The output bundle will contain the following:
 Where the these values are filled in:
 
 * {{moduleName}}
-1. ngify.moduleName in package.json
-2. name in package.json
-3. folder name
+    * ngify.moduleName in package.json
+    * name in package.json
+    * folder name
 
 * {{templateName}} - The file name with extension
 
