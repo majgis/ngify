@@ -13,12 +13,11 @@ describe('ngifyTransform', function () {
 
     it('calls queue with the transformed data when end is called', function () {
         stream.queue = function(chunk){
-            console.log('chunk',chunk);
+            if (chunk)
+                console.log(chunk);
         };
         stream.write('<div>test</div>');
         stream.end();
-        console.log(stream);
-
     });
 
 
