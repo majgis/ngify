@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "Browserify transform for angular templates",
   "keywords": [
-    "browserify-transform"
+    "browserify-transform",
+    "browserify",
+    "angular"
   ],
   "main":"index.js",
   "repository": {

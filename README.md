@@ -20,7 +20,7 @@ Configure browserify to use this transform in package.json:
         ]
       }
 
-When you require html files, they will processesed by ngify:
+When you require html files, they will be processed by ngify:
 
 
     require('angularTemplate.html')
@@ -37,12 +37,12 @@ The output bundle will contain the following:
          ])
 
 
-Where the following values are filled in:
+Where the these values are filled in:
 
 * {{moduleName}}
-    1. The name defined in package.json
-    2. If there is no package.json but there is an index.js file, this value
-    will be the name of the containing folder
+    1. ngify.moduleName in package.json
+    2. name in package.json
+    3. folder name
 
 * {{templateName}}
     1. The file name with extension
@@ -69,19 +69,13 @@ The following configuration can be set in package.json:
 
         "moduleName":"MyModuleName"
 
-
 The default for minifyArgs is shown.  Anything you set will completely
 override this default.
-
-The module name is taken from:
-1. ngify.moduleName in package.json
-2. name in package.json
-3. folder name
 
 
 Hack
 ---
-There is one questionable feature that allows you to not define a package.json
+There is one hackish feature that allows you to not define a package.json
 but still use this transform.
 
 This transform recognizes index.js as a module and will use the folder name for
@@ -93,14 +87,14 @@ import the index file, it will work:
 
     require("myModule/index")
 
-Execute Tests
+Contribute
 ---
-For a single run:
+Execute tests for a single run:
 
 
     npm test
 
-For continuous testing with changes:
+Execute tests for continuous testing with changes:
 
 
     npm run-script autotest
