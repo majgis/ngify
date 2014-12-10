@@ -40,16 +40,15 @@ The output bundle will contain the following:
 Where the these values are filled in:
 
 * {{moduleName}}
-    1. ngify.moduleName in package.json
-    2. name in package.json
-    3. folder name
+1. ngify.moduleName in package.json
+2. name in package.json
+3. folder name
 
-* {{templateName}}
-    1. The file name with extension
+* {{templateName}} - The file name with extension
 
-* {{html}}
-    1. The contents of the file minimized using html-minifier, here are the
+* {{html}} - The contents of the file minimized using html-minifier, here are the
     default arguments:
+
 
         {
             collapseWhitespace: true,
