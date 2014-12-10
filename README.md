@@ -3,6 +3,13 @@ Description
 Ngify is a Browserify transform for converting Angular templates to javascript
 using $templateCache.
 
+The file name, with extension, is used for the template name.
+
+Either ngify.moduleName or name in package.json is used for the module name.
+
+If you don't have a package.json, but do have an index.js and import it directly,
+the folder name will be used for the module name.
+
 Usage
 ---
 Install ngify locally:
@@ -25,7 +32,7 @@ When you require html files, they will be processed by ngify:
 
     require('angularTemplate.html')
 
-The output bundle will contain the following:
+The output bundle will contain a minified version of the following:
 
 
     angular.module("{{moduleName}}")
@@ -71,6 +78,7 @@ The following configuration can be set in package.json:
 The default for minifyArgs is shown.  Anything you set will completely
 override this default.
 
+The moduleName setting will override the value for name in package.json.
 
 Hack
 ---
