@@ -7,10 +7,10 @@
     "browserify",
     "angular"
   ],
-  "main":"index.js",
+  "main": "index.js",
   "repository": {
-    "type":"git",
-    "url":"https://github.com/majgis/ngify"
+    "type": "git",
+    "url": "https://github.com/majgis/ngify"
   },
   "scripts": {
     "test": "node_modules/jasmine-node/bin/jasmine-node ./spec",
@@ -19,11 +19,11 @@
   "author": "majgis",
   "license": "MIT",
   "dependencies": {
-    "through": "~2.3.6",
-    "string": "~2.2.0",
+    "extend": "~2.0.0",
     "html-minifier": "~0.6.9",
     "q": "~1.1.2",
-    "extend": "~2.0.0"
+    "string-template": "~0.2.0",
+    "through": "~2.3.6"
   },
   "devDependencies": {
     "jasmine-node": "~1.14.5"
