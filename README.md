@@ -1,7 +1,8 @@
 Description
 ---
-Ngify is a Browserify transform for converting Angular templates to javascript
-using $templateCache.
+Ngify is a [Browserify](https://github.com/substack/node-browserify#usage)
+transform for converting Angular templates to javascript using
+[$templateCache](https://docs.angularjs.org/api/ng/service/$templateCache).
 
 The file name, with extension, is used for the template name.
 
@@ -35,11 +36,11 @@ When you require html files, they will be processed by ngify:
 The output bundle will contain a minified version of the following:
 
 
-    angular.module("{{moduleName}}")
+    angular.module('{{moduleName}}')
         .run([
-            "$templateCache",
+            '$templateCache',
             function($templateCache){
-                $templateCache.put("{{templateName}}","{{html}}")
+                $templateCache.put('{{templateName}}','{{html}}')
             }
          ])
 
