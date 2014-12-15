@@ -73,8 +73,8 @@ The following configuration can be set in package.json:
                 collapseWhitespace: true,
                 conservativeCollapse: true
             },
-
-        "moduleName":"MyModuleName"
+            "moduleName":"MyModuleName"
+        }
 
 The default for minifyArgs is shown.  Anything you set will completely
 override this default.
