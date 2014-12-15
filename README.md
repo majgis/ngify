@@ -93,7 +93,7 @@ Browserify will not apply the transform if the package is imported, but if you
 import the index file, it will work:
 
 
-    require("myModule/index")
+    require("./myModule/index")
 
 Contribute
 ---
