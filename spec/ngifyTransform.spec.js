@@ -1,4 +1,5 @@
 var ngifyTransform = require('../lib/ngifyTransform');
+var ngifyCache = require('../lib/ngifyCache');
 
 describe('ngifyTransform', function () {
     var stream;
@@ -22,5 +23,11 @@ describe('ngifyTransform', function () {
         stream.end();
     });
 
+    it('clears ngifyCache', function(){
+
+        ngifyCache.setValue('test', 'abc321');
+        ngifyTransform.clearCache();
+        expect (ngifyCache.getValue('test')).toEqual(undefined);
+    })
 
 });
