@@ -1,3 +1,3 @@
-ngifyTransform = require('./lib/ngifyTransform');
+ngify = require('./lib/ngify');
 
-module.exports = ngifyTransform;
+module.exports = ngify;

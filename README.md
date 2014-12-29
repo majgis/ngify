@@ -1,15 +1,27 @@
 Description
 ---
-Ngify is a [Browserify](https://github.com/substack/node-browserify#usage)
-transform for converting Angular templates to javascript using
+[Ngify](https://www.npmjs.com/package/ngify)
+is a
+[Browserify](https://github.com/substack/node-browserify)
+transform for converting
+[Angular templates](https://docs.angularjs.org/guide/templates)
+to JavaScript using
 [$templateCache](https://docs.angularjs.org/api/ng/service/$templateCache).
 
-The file name, with extension, is used for the template name.
 
-Either ngify.moduleName or name in package.json is used for the module name.
+Breaking Changes at v0.1.0
+---
+These changes were made to reduce the
+complexity of the underlying code and greatly improve performance.
 
-If you don't have a package.json, but do have an index.js and import it directly,
-the folder name will be used for the module name.
+Here is a summary of what changed:
+
+  * All file system calls were eliminated
+  * The official [browserify method for configuring transforms]
+(https://github.com/substack/browserify-handbook#configuring-transforms)
+was implemented
+  * A package.json file with default browserify configuration is now required
+
 
 Usage
 ---
@@ -28,72 +40,94 @@ Configure browserify to use this transform in package.json:
         ]
       }
 
+To change the default settings, you can configure ngify as follows
+(the defaults are shown):
+
+
+      "browserify": {
+        "transform": [
+          [
+            "ngify",
+            {
+              "moduleName": "ngify",
+              "extension": ".html",
+              "outputTemplate": "angular.module('{moduleName}').run(['$templateCache', function($templateCache){$templateCache.put('{templateName}','{html}')}])",
+              "minifyArgs": {
+                  "collapseWhitespace": true,
+                  "conservativeCollapse": true
+              }
+            }
+          ]
+        ]
+
 When you require html files, they will be processed by ngify:
 
 
-    require('angularTemplate.html')
+    require('./templates/angularTemplate.html')
+
+Here are the example contents of angularTemplate.html:
+
+
+    <div>
+        {{value}}
+    <div>
 
 The output bundle will contain a minified version of the following:
 
 
-    angular.module('{{moduleName}}')
+    angular.module('ngify')
         .run([
             '$templateCache',
             function($templateCache){
-                $templateCache.put('{{templateName}}','{{html}}')
+                $templateCache.put(
+                    'angularTemplate.html',
+                    '<div> {{value}} </div>'
+                )
             }
          ])
 
 
-Where the these values are filled in:
-
-* {{moduleName}}
-    * ngify.moduleName in package.json
-    * name in package.json
-    * folder name
-
-* {{templateName}} - The file name with extension
-
-* {{html}} - The contents of the file minimized using html-minifier, here are the
-    default arguments:
-
-
-        {
-            collapseWhitespace: true,
-            conservativeCollapse: true
-        }
-
-Configuration
+Configuration Details
 ---
-The following configuration can be set in package.json:
+Here are the default settings:
+
+    {
+      "moduleName": "ngify",
+      "extension": ".html",
+      "outputTemplate": "angular.module('{moduleName}').run(['$templateCache', function($templateCache){$templateCache.put('{templateName}','{html}')}])",
+      "minifyArgs": {
+          "collapseWhitespace": true,
+          "conservativeCollapse": true
+      }
+    }
+
+Here is a description of each setting:
+
+* moduleName
+    * This value replaces {moduleName} in the outputTemplate
+    * If you don't specify your own module name, you need to define the
+    following angular module somewhere in your code:
 
 
-        "ngify": {
-            "minifyArgs": {
-                collapseWhitespace: true,
-                conservativeCollapse: true
-            },
-            "moduleName":"MyModuleName"
-        }
+        angular.module('ngify', [])
 
-The default for minifyArgs is shown.  Anything you set will completely
-override this default.
+* extension
+    * It is how ngify identifies the files it will transform
+    * As long as the file name ends with this suffix, it will be processed
+    * For example, if you have two template types, `.ng.html` might identify
+    your angular templates
 
-The moduleName setting will override the value for name in package.json.
+* outputTemplate
+    * This is the JavaScript output, with these three tokens being replaced:
+        * {moduleName} - described above
+        * {templateName} - file name with extension
+        * {html} - minified html file contents
+    * The replacements are done using [string-template](https://www.npmjs.com/package/string-template)
 
-Hack
----
-There is one hackish feature that allows you to not define a package.json
-but still use this transform.
+* minifyArgs
+    * The default object is completely overwritten with the custom arguments
+    * See [html-minifier](https://www.npmjs.com/package/html-minifier) for supported options
 
-This transform recognizes index.js as a module and will use the folder name for
-the moduleName if package.json is missing.
-
-Browserify will not apply the transform if the package is imported, but if you
-import the index file, it will work:
-
-
-    require("./myModule/index")
 
 Contribute
 ---
@@ -105,7 +139,8 @@ Execute tests for a single run:
 Execute tests for continuous testing with changes:
 
 
-    npm run-script autotest
+    npm run autotest
+
 
 License
 ---
