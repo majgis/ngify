@@ -17,8 +17,7 @@ complexity of the underlying code and greatly improve performance.
 Here is a summary of what changed:
 
   * All file system calls were eliminated
-  * The official [browserify method for configuring transforms]
-(https://github.com/substack/browserify-handbook#configuring-transforms)
+  * The official [browserify method for configuring transforms](https://github.com/substack/browserify-handbook#configuring-transforms)
 was implemented
   * A package.json file with default browserify configuration is now required
 
@@ -65,7 +64,7 @@ When you require html files, they will be processed by ngify:
 
     require('./templates/angularTemplate.html')
 
-Here are the example contents of angularTemplate.html:
+Here is an example of the contents of angularTemplate.html:
 
 
     <div>
@@ -112,7 +111,7 @@ Here is a description of each setting:
         angular.module('ngify', [])
 
 * extension
-    * It is how ngify identifies the files it will transform
+    * How ngify identifies the files it will transform
     * As long as the file name ends with this suffix, it will be processed
     * For example, if you have two template types, `.ng.html` might identify
     your angular templates
