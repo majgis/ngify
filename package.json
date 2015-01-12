@@ -13,8 +13,8 @@
     "url": "https://github.com/majgis/ngify"
   },
   "scripts": {
-    "test": "node_modules/jasmine-node/bin/jasmine-node ./spec",
-    "autotest": "node_modules/jasmine-node/bin/jasmine-node ./spec --color --autotest --watch ./lib"
+    "test": "jasmine-node ./spec",
+    "autotest": "jasmine-node ./spec --color --autotest --watch ./lib"
   },
   "author": "majgis",
   "license": "MIT",
