@@ -8,7 +8,6 @@ describe('NgifyStreamReader', function () {
         stream={},
         queue;
 
-
     beforeEach(function () {
         defaultReader = new NgifyStreamReader('/test/index.html');
         defaultReaderInvalid = new NgifyStreamReader('/test/index.js');
@@ -21,7 +20,7 @@ describe('NgifyStreamReader', function () {
         queue = [];
         stream.queue = function(chunk) {
             queue.push(chunk);
-        }
+        };
     });
 
     it('is valid for files with .html extension by default', function () {
@@ -59,5 +58,13 @@ describe('NgifyStreamReader', function () {
         defaultReader.write(stream, chunk);
         defaultReader.end(stream);
         expect(queue[0].indexOf('<div> test </div>')).toBeGreaterThan(-1);
+    });
+
+    it('emits an error event when given invalid HTML', function () {
+        stream.emit = jasmine.createSpy('emit');
+        var chunk = '<div';
+        defaultReader.write(stream, chunk);
+        defaultReader.end(stream);
+        expect(stream.emit).toHaveBeenCalledWith('error', jasmine.any(String));
     });
 });
