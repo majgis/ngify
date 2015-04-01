@@ -11,7 +11,7 @@ describe('NgifySettings', function () {
         filePath = '/a/b/c/123.html';
         settingsCustom = new NgifySettings(filePath, args);
         args = {
-            extension: 'customExtension',
+            htmlExtension: 'customExtension',
             minifyArgs: {
                 anything: 'customMinifyArg'
             },
@@ -26,7 +26,7 @@ describe('NgifySettings', function () {
     });
 
     it('sets the default extension to .html', function () {
-        expect(settings.getValue('extension')).toEqual('.html');
+        expect(settings.getValue('htmlExtension')).toEqual('.html');
     });
 
     it('sets the default minify args', function () {
@@ -42,7 +42,7 @@ describe('NgifySettings', function () {
     });
 
     it('overrides default extension from userSettings', function () {
-        expect(settingsCustom.getValue('extension')).toBe(args.extension)
+        expect(settingsCustom.getValue('htmlExtension')).toBe(args.htmlExtension)
     });
 
     it('overrides default minify args', function () {
