@@ -37,8 +37,8 @@ describe('NgifySettings', function () {
         expect(settings.getValue('moduleName')).toBe('ngify');
     });
 
-    it('sets the default outputTemplate', function () {
-        expect(settings.getValue('htmlTemplate').indexOf('angular')).toBe(0);
+    it('sets the default htmlTemplate', function () {
+        expect(settings.getValue('htmlTemplate').indexOf('.run')).toBe(0);
     });
 
     it('overrides default extension from userSettings', function () {

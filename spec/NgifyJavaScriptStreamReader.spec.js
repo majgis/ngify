@@ -37,6 +37,7 @@ describe('NgifyJavaScriptStreamReader', function () {
         var code = 'exports["@ng"]={type:"controller", name:"test"};';
         var type = "controller";
         var appended = format(
+            settings.getValue('moduleTemplate') +
             settings.getValue('jsTemplates')[type],
             {
                 name: 'test',

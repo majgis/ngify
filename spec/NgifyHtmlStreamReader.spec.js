@@ -16,7 +16,8 @@ describe('NgifyHtmlStreamReader', function () {
         defaultReaderInvalid = new NgifyHtmlStreamReader('/test/index.js', settings);
         var customArgs = {
             htmlExtension: '.ng.h',
-            htmlTemplate: '{moduleName}{htmlName}{html}'
+            moduleTemplate: '{moduleName}',
+            htmlTemplate: '{htmlName}{html}'
         };
         var customSettingsPath = '/test/index.ng.h';
         customSettings = new NgifySettings(customSettingsPath, customArgs);
