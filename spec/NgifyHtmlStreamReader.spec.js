@@ -1,43 +1,35 @@
-var NgifyStreamReader = require('../lib/NgifyStreamReader');
+var NgifyHtmlStreamReader = require('../lib/NgifyHtmlStreamReader');
+var NgifySettings = require('../lib/NgifySettings');
 
-describe('NgifyStreamReader', function () {
+describe('NgifyHtmlStreamReader', function () {
     var defaultReader,
         customReader,
         defaultReaderInvalid,
         customReaderInvalid,
         stream={},
-        queue;
+        queue,
+        customSettings;
 
     beforeEach(function () {
-        defaultReader = new NgifyStreamReader('/test/index.html');
-        defaultReaderInvalid = new NgifyStreamReader('/test/index.js');
+        var settings = new NgifySettings();
+        defaultReader = new NgifyHtmlStreamReader('/test/index.html', settings);
+        defaultReaderInvalid = new NgifyHtmlStreamReader('/test/index.js', settings);
         var customArgs = {
-            extension: '.ng.h',
-            outputTemplate: '{moduleName}{templateName}{html}'
+            htmlExtension: '.ng.h',
+            moduleTemplate: '{moduleName}',
+            htmlTemplate: '{htmlName}{html}'
         };
-        customReader = new NgifyStreamReader('/test/index.ng.h', customArgs);
-        customReaderInvalid = new NgifyStreamReader('/test/index.js', customArgs);
+        var customSettingsPath = '/test/index.ng.h';
+        customSettings = new NgifySettings(customSettingsPath, customArgs);
+        customReader = new NgifyHtmlStreamReader(customSettingsPath, customSettings);
+
+        var customInvalidPath = '/test/index.js';
+        var customInvalidSettings = new NgifySettings(customInvalidPath, customArgs);
+        customReaderInvalid = new NgifyHtmlStreamReader(customInvalidPath, customInvalidSettings);
         queue = [];
         stream.queue = function(chunk) {
             queue.push(chunk);
         };
-    });
-
-    it('is valid for files with .html extension by default', function () {
-
-        expect(defaultReader.isValidFile()).toBe(true);
-    });
-
-    it('is valid for other file extensions when specified', function () {
-        expect(customReader.isValidFile()).toBe(true);
-    });
-
-    it('is not valid for files without .html extension by default', function () {
-        expect(defaultReaderInvalid.isValidFile()).toBe(false);
-    });
-
-    it('is not valid for files without full custom extension', function () {
-        expect(customReaderInvalid.isValidFile()).toBe(false);
     });
 
     it('outputs a formatted outputTemplate', function () {

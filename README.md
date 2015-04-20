@@ -3,28 +3,18 @@ Description
 [Ngify](https://www.npmjs.com/package/ngify)
 is a
 [Browserify](https://github.com/substack/node-browserify)
-transform for converting
+transform that performs the following tasks:
+
+1. Converts
 [Angular templates](https://docs.angularjs.org/guide/templates)
 to JavaScript using
 [$templateCache](https://docs.angularjs.org/api/ng/service/$templateCache).
-
-
-Breaking Changes at v0.1.0
----
-These changes were made to reduce the
-complexity of the underlying code and greatly improve performance.
-
-Here is a summary of what changed:
-
-  * All file system calls were eliminated
-  * The official [browserify method for configuring transforms](https://github.com/substack/browserify-handbook#configuring-transforms)
-was implemented
-  * A package.json file with default browserify configuration is now required
+2. Eliminates Angular boilerplate by using annotations
 
 
 Usage
 ---
-Install ngify locally:
+Install ngify locally and save in package.json:
 
 
     npm install ngify --save-dev
@@ -39,30 +29,12 @@ Configure browserify to use this transform in package.json:
         ]
       }
 
-To change the default settings, you can configure ngify as follows
-(the defaults are shown):
+
+When you require html or js files, they will be processed by ngify:
 
 
-      "browserify": {
-        "transform": [
-          [
-            "ngify",
-            {
-              "moduleName": "ngify",
-              "extension": ".html",
-              "outputTemplate": "angular.module('{moduleName}').run(['$templateCache', function($templateCache){$templateCache.put('{templateName}','{html}')}])",
-              "minifyArgs": {
-                  "collapseWhitespace": true,
-                  "conservativeCollapse": true
-              }
-            }
-          ]
-        ]
-
-When you require html files, they will be processed by ngify:
-
-
-    require('./templates/angularTemplate.html')
+    require('./templates/angularTemplate.html');
+    require('./lib/myLib.js');
 
 Here is an example of the contents of angularTemplate.html:
 
@@ -71,7 +43,28 @@ Here is an example of the contents of angularTemplate.html:
         {{value}}
     <div>
 
-The output bundle will contain a minified version of the following:
+Here is an example of the contents of  myLib.js:
+
+
+    function MyCtrl (serviceName){
+        this.message = 'Hello World!';
+    }
+
+    MyCtrl.prototype.sayHello = function(){
+        console.log(this.message);
+    }
+
+    exports = module.exports = MyCtrl
+
+    exports['@ng'] = {
+        name: 'myCtrl',
+        type: 'controller',
+        inject: [ 'serviceName' ],
+    }
+
+
+In the case of the HTML file, the file contents are replaced with
+a minified version of the following:
 
 
     angular.module('ngify')
@@ -86,46 +79,123 @@ The output bundle will contain a minified version of the following:
          ])
 
 
-Configuration Details
----
-Here are the default settings:
+In the case of the JS file, the following is appended to the file contents:
 
-    {
-      "moduleName": "ngify",
-      "extension": ".html",
-      "outputTemplate": "angular.module('{moduleName}').run(['$templateCache', function($templateCache){$templateCache.put('{templateName}','{html}')}])",
-      "minifyArgs": {
-          "collapseWhitespace": true,
-          "conservativeCollapse": true
-      }
-    }
+
+    angular.module('ngify')
+        .controller('myCtrl', [ 'serviceName', module.exports ])
+
+
+Configuration
+---
+To change the default settings, you can configure ngify as follows
+(the defaults are shown):
+
+
+      "browserify": {
+        "transform": [
+          [
+            "ngify",
+            {
+              moduleName: 'ngify',
+              moduleTemplate: "angular.module('{moduleName}')",
+
+              htmlExtension: '.html',
+              htmlTemplate: ".run(['$templateCache', function($templateCache){$templateCache.put('{templateName}','{html}')}])",
+              htmlMinifyArgs: {
+                collapseWhitespace: true,
+                conservativeCollapse: true
+              },
+
+              jsExtension: '.js',
+              jsAnnotation: '@ng',
+              jsTemplates: {
+
+                provider:   ".{type}('{name}', [ {inject}module.exports ] );",
+                factory:    ".{type}('{name}', [ {inject}module.exports ] );",
+                service:    ".{type}('{name}', [ {inject}module.exports ] );",
+                animation:  ".{type}('{name}', [ {inject}module.exports ] );",
+                filter:     ".{type}('{name}', [ {inject}module.exports ] );",
+                controller: ".{type}('{name}', [ {inject}module.exports ] );",
+                directive:  ".{type}('{name}', [ {inject}module.exports ] );",
+
+                value:    ".{type}('{name}', module.exports );",
+                constant: ".{type}('{name}', module.exports );",
+
+                config: ".{type}([ {inject}module.exports ]);",
+                run:    ".{type}([ {inject}module.exports ]);"
+              }
+            }
+          ]
+        ]
 
 Here is a description of each setting:
 
 * moduleName
-    * This value replaces {moduleName} in the outputTemplate
+    * This value replaces {moduleName} in the moduleTemplate
     * If you don't specify your own module name, you need to define the
     following angular module somewhere in your code:
 
-
         angular.module('ngify', [])
 
-* extension
-    * How ngify identifies the files it will transform
+* moduleTemplate
+    * This template is prefixed to all other templates
+    * {moduleName} is replaced with value specified
+
+* htmlExtension
+    * How ngify identifies the HTML files it will transform
     * As long as the file name ends with this suffix, it will be processed
     * For example, if you have two template types, `.ng.html` might identify
     your angular templates
+    * You can disable the HTML functionality (all html files will be ignored)
+    by setting this value to false.
 
-* outputTemplate
-    * This is the JavaScript output, with these three tokens being replaced:
-        * {moduleName} - described above
+* htmlTemplate
+    * This is the JavaScript output, with these tokens being replaced:
         * {templateName} - file name with extension
         * {html} - minified html file contents
-    * The replacements are done using [string-template](https://www.npmjs.com/package/string-template)
 
-* minifyArgs
+* htmlMinifyArgs
     * The default object is completely overwritten with the custom arguments
     * See [html-minifier](https://www.npmjs.com/package/html-minifier) for supported options
+
+* jsExtension
+    * How ngify identifies the JS files it will transform
+    * As long as the file name ends with this suffix, it will be processed
+    * For example, `.ng.js` might identify your angular files
+    * You can disable the JS functionality (all JS files will be ignored)
+    by setting this value to false
+
+* jsAnnotation
+    * The property name on module.exports that ngify uses to generate the Angular boilerplate
+
+* jsTemplates
+    * Each template is matched using the jsAnnotation `type` property
+
+
+Additional Information for Trouble-shooting
+---
+
+* Token replacements are done using [string-template](https://www.npmjs.com/package/string-template)
+
+
+Change Log
+---
+**v1.0.0** - Breaking changes to add support for annotations
+
+  * The following configuration properties were renamed:
+    * minifyArgs --> htmlMinifyArgs
+    * extension --> htmlExtension
+    * outputTemplate --> htmlTemplate
+
+  * Support for @ng annotations was added
+
+**v0.1.0** - Breaking changes to eliminate file system calls
+
+  * All file system calls were eliminated
+  * The official [browserify method for configuring transforms](https://github.com/substack/browserify-handbook#configuring-transforms)
+was implemented
+  * A package.json file with default browserify configuration is now required
 
 
 Contribute

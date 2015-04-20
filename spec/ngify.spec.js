@@ -5,7 +5,7 @@ describe('ngify', function () {
         queue;
 
     beforeEach(function () {
-        stream = ngify('/a/test.ng.html', {templateName: 'ngify.spec.js'});
+        stream = ngify('/a/test.ng.html', {htmlName: 'ngify.spec.js'});
         queue = [];
         stream.queue = function(chunk){
             queue.push(chunk);

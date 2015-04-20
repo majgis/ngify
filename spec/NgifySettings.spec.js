@@ -11,43 +11,43 @@ describe('NgifySettings', function () {
         filePath = '/a/b/c/123.html';
         settingsCustom = new NgifySettings(filePath, args);
         args = {
-            extension: 'customExtension',
-            minifyArgs: {
+            htmlExtension: 'customExtension',
+            htmlMinifyArgs: {
                 anything: 'customMinifyArg'
             },
             moduleName: 'customModuleName',
-            outputTemplate: 'customOutputTemplate'
+            htmlTemplate: 'customOutputTemplate'
         };
         settings = new NgifySettings(filePath);
     });
 
     it('sets templateName with the file name', function () {
-        expect(settings.getValue('templateName')).toEqual('123.html');
+        expect(settings.getValue('htmlName')).toEqual('123.html');
     });
 
     it('sets the default extension to .html', function () {
-        expect(settings.getValue('extension')).toEqual('.html');
+        expect(settings.getValue('htmlExtension')).toEqual('.html');
     });
 
     it('sets the default minify args', function () {
-        expect(settings.getValue('minifyArgs').collapseWhitespace).toBe(true);
+        expect(settings.getValue('htmlMinifyArgs').collapseWhitespace).toBe(true);
     });
 
     it('sets the default moduleName to ngify', function () {
         expect(settings.getValue('moduleName')).toBe('ngify');
     });
 
-    it('sets the default outputTemplate', function () {
-        expect(settings.getValue('outputTemplate').indexOf('angular')).toBe(0);
+    it('sets the default htmlTemplate', function () {
+        expect(settings.getValue('htmlTemplate').indexOf('.run')).toBe(0);
     });
 
     it('overrides default extension from userSettings', function () {
-        expect(settingsCustom.getValue('extension')).toBe(args.extension)
+        expect(settingsCustom.getValue('htmlExtension')).toBe(args.htmlExtension)
     });
 
     it('overrides default minify args', function () {
-        expect(settingsCustom.getValue('minifyArgs').anything)
-            .toBe(args.minifyArgs.anything);
+        expect(settingsCustom.getValue('htmlMinifyArgs').anything)
+            .toBe(args.htmlMinifyArgs.anything);
     });
 
     it('overrides default moduleName', function () {
@@ -55,8 +55,8 @@ describe('NgifySettings', function () {
     });
 
     it('overrides default outputTemplate', function () {
-        expect(settingsCustom.getValue('outputTemplate'))
-            .toBe(args.outputTemplate);
+        expect(settingsCustom.getValue('htmlTemplate'))
+            .toBe(args.htmlTemplate);
     });
 
 });
