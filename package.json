@@ -19,9 +19,8 @@
   "author": "majgis",
   "license": "MIT",
   "dependencies": {
+    "falafel": "^1.0.1",
     "html-minifier": "~0.6.9",
-    "install": "^0.1.8",
-    "npm": "^2.7.4",
     "string-template": "~0.2.0",
     "through": "~2.3.6"
   },
