@@ -14,7 +14,7 @@ to JavaScript using
 
 Usage
 ---
-Install ngify locally:
+Install ngify locally and save in package.json:
 
 
     npm install ngify --save-dev
@@ -29,46 +29,6 @@ Configure browserify to use this transform in package.json:
         ]
       }
 
-To change the default settings, you can configure ngify as follows
-(The defaults are shown.  There is an explanation of each in the next section):
-
-
-      "browserify": {
-        "transform": [
-          [
-            "ngify",
-            {
-              moduleName: 'ngify',
-              moduleTemplate: "angular.module('{moduleName}')",
-
-              htmlExtension: '.html',
-              htmlTemplate: ".run(['$templateCache', function($templateCache){$templateCache.put('{templateName}','{html}')}])",
-              htmlMinifyArgs: {
-                collapseWhitespace: true,
-                conservativeCollapse: true
-              },
-
-              jsExtension: '.js',
-              jsAnnotation: '@ng',
-              jsTemplates: {
-              
-                provider:   ".{type}('{name}', [ {inject}module.exports ] );",
-                factory:    ".{type}('{name}', [ {inject}module.exports ] );",
-                service:    ".{type}('{name}', [ {inject}module.exports ] );",
-                animation:  ".{type}('{name}', [ {inject}module.exports ] );",
-                filter:     ".{type}('{name}', [ {inject}module.exports ] );",
-                controller: ".{type}('{name}', [ {inject}module.exports ] );",
-                directive:  ".{type}('{name}', [ {inject}module.exports ] );",
-                
-                value:    ".{type}('{name}', module.exports );",
-                constant: ".{type}('{name}', module.exports );",
-                
-                config: ".{type}([ {inject}module.exports ]);",
-                run:    ".{type}([ {inject}module.exports ]);"
-              }
-            }
-          ]
-        ]
 
 When you require html or js files, they will be processed by ngify:
 
@@ -126,15 +86,55 @@ In the case of the JS file, the following is appended to the file contents:
         .controller('myCtrl', [ 'serviceName', module.exports ])
 
 
-Configuration Details
+Configuration
 ---
-Here is a description of each configuration setting:
+To change the default settings, you can configure ngify as follows
+(the defaults are shown):
+
+
+      "browserify": {
+        "transform": [
+          [
+            "ngify",
+            {
+              moduleName: 'ngify',
+              moduleTemplate: "angular.module('{moduleName}')",
+
+              htmlExtension: '.html',
+              htmlTemplate: ".run(['$templateCache', function($templateCache){$templateCache.put('{templateName}','{html}')}])",
+              htmlMinifyArgs: {
+                collapseWhitespace: true,
+                conservativeCollapse: true
+              },
+
+              jsExtension: '.js',
+              jsAnnotation: '@ng',
+              jsTemplates: {
+
+                provider:   ".{type}('{name}', [ {inject}module.exports ] );",
+                factory:    ".{type}('{name}', [ {inject}module.exports ] );",
+                service:    ".{type}('{name}', [ {inject}module.exports ] );",
+                animation:  ".{type}('{name}', [ {inject}module.exports ] );",
+                filter:     ".{type}('{name}', [ {inject}module.exports ] );",
+                controller: ".{type}('{name}', [ {inject}module.exports ] );",
+                directive:  ".{type}('{name}', [ {inject}module.exports ] );",
+
+                value:    ".{type}('{name}', module.exports );",
+                constant: ".{type}('{name}', module.exports );",
+
+                config: ".{type}([ {inject}module.exports ]);",
+                run:    ".{type}([ {inject}module.exports ]);"
+              }
+            }
+          ]
+        ]
+
+Here is a description of each setting:
 
 * moduleName
     * This value replaces {moduleName} in the moduleTemplate
     * If you don't specify your own module name, you need to define the
     following angular module somewhere in your code:
-
 
         angular.module('ngify', [])
 
@@ -147,13 +147,13 @@ Here is a description of each configuration setting:
     * As long as the file name ends with this suffix, it will be processed
     * For example, if you have two template types, `.ng.html` might identify
     your angular templates
+    * You can disable the HTML functionality (all html files will be ignored)
+    by setting this value to false.
 
 * htmlTemplate
-    * This is the JavaScript output, with these three tokens being replaced:
-        * {moduleName} - described above
+    * This is the JavaScript output, with these tokens being replaced:
         * {templateName} - file name with extension
         * {html} - minified html file contents
-    * The replacements are done using [string-template](https://www.npmjs.com/package/string-template)
 
 * htmlMinifyArgs
     * The default object is completely overwritten with the custom arguments
@@ -163,12 +163,21 @@ Here is a description of each configuration setting:
     * How ngify identifies the JS files it will transform
     * As long as the file name ends with this suffix, it will be processed
     * For example, `.ng.js` might identify your angular files
+    * You can disable the JS functionality (all JS files will be ignored)
+    by setting this value to false
 
 * jsAnnotation
-    * A property on module.exports that ngify uses to generate the Angular boilerplate
+    * The property name on module.exports that ngify uses to generate the Angular boilerplate
 
 * jsTemplates
     * Each template is matched using the jsAnnotation `type` property
+
+
+Additional Information for Trouble-shooting
+---
+
+* Token replacements are done using [string-template](https://www.npmjs.com/package/string-template)
+
 
 Change Log
 ---
