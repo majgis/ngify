@@ -23,7 +23,7 @@ describe('NgifyJavaScriptStreamReader', function () {
         queue = [];
         defaultReader.write(stream, scenario.code);
         defaultReader.end(stream);
-        expect(queue[0]).toBe(scenario.code + scenario.append);
+        expect(queue[0]).toBe(scenario.code + '\n' + scenario.append);
     }
 
     it('should output unaltered code when there is no annotation', function () {
@@ -47,7 +47,7 @@ describe('NgifyJavaScriptStreamReader', function () {
         );
         defaultReader.write(stream, code);
         defaultReader.end(stream);
-        expect(queue[0]).toBe(code + appended);
+        expect(queue[0]).toBe(code + '\n' + appended);
     });
 
     describe('inject', function () {
