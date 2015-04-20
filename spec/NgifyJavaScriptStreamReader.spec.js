@@ -54,7 +54,7 @@ describe('NgifyJavaScriptStreamReader', function () {
         it('should work for a string literal', function () {
             executeScenario({
                 code: "exports['@ng']={type:'controller',inject:'test'};",
-                append: "angular.module('ngify').controller('', [ test, module.exports ] );"
+                append: "angular.module('ngify').controller('', [ 'test', module.exports ] );"
             })
         });
 
@@ -68,14 +68,14 @@ describe('NgifyJavaScriptStreamReader', function () {
         it('should work for an array expression with one element', function () {
             executeScenario({
                 code: "exports['@ng']={type:'controller',inject:['test']};",
-                append: "angular.module('ngify').controller('', [ test, module.exports ] );"
+                append: "angular.module('ngify').controller('', [ 'test', module.exports ] );"
             })
         });
 
         it('should work for an array expression with two elements', function () {
             executeScenario({
                 code: "exports['@ng']={type:'controller',inject:['test', 'test2']};",
-                append: "angular.module('ngify').controller('', [ test, test2, module.exports ] );"
+                append: "angular.module('ngify').controller('', [ 'test', 'test2', module.exports ] );"
             })
         })
     });
@@ -83,21 +83,21 @@ describe('NgifyJavaScriptStreamReader', function () {
     it('should produce correct output for provider', function () {
         executeScenario({
             code: 'exports["@ng"]={type:"provider", name:"test", inject:["sam"]};',
-            append: "angular.module('ngify').provider('test', [ sam, module.exports ] );"
+            append: "angular.module('ngify').provider('test', [ 'sam', module.exports ] );"
         });
     });
 
     it('should produce correct output for controller', function () {
         executeScenario({
             code: 'exports["@ng"]={type:"controller", name:"test", inject:["sam"]};',
-            append: "angular.module('ngify').controller('test', [ sam, module.exports ] );"
+            append: "angular.module('ngify').controller('test', [ 'sam', module.exports ] );"
         });
     });
 
     it('should produce correct output for factory', function () {
         executeScenario({
             code: 'exports["@ng"]={type:"factory", name:"test", inject:["sam"]};',
-            append: "angular.module('ngify').factory('test', [ sam, module.exports ] );"
+            append: "angular.module('ngify').factory('test', [ 'sam', module.exports ] );"
         });
     });
 
@@ -118,42 +118,42 @@ describe('NgifyJavaScriptStreamReader', function () {
     it('should produce correct output for animation', function () {
         executeScenario({
             code: 'exports["@ng"]={type:"animation", name:"test", inject:["sam"]};',
-            append: "angular.module('ngify').animation('test', [ sam, module.exports ] );"
+            append: "angular.module('ngify').animation('test', [ 'sam', module.exports ] );"
         });
     });
 
     it('should produce correct output for filter', function () {
         executeScenario({
             code: 'exports["@ng"]={type:"filter", name:"test", inject:["sam"]};',
-            append: "angular.module('ngify').filter('test', [ sam, module.exports ] );"
+            append: "angular.module('ngify').filter('test', [ 'sam', module.exports ] );"
         });
     });
 
     it('should produce correct output for filter', function () {
         executeScenario({
             code: 'exports["@ng"]={type:"filter", name:"test", inject:["sam"]};',
-            append: "angular.module('ngify').filter('test', [ sam, module.exports ] );"
+            append: "angular.module('ngify').filter('test', [ 'sam', module.exports ] );"
         });
     });
 
     it('should produce correct output for directive', function () {
         executeScenario({
             code: 'exports["@ng"]={type:"directive", name:"test", inject:["sam"]};',
-            append: "angular.module('ngify').directive('test', [ sam, module.exports ] );"
+            append: "angular.module('ngify').directive('test', [ 'sam', module.exports ] );"
         });
     });
 
     it('should produce correct output for config', function () {
         executeScenario({
             code: 'exports["@ng"]={type:"config", name:"test", inject:["sam"]};',
-            append: "angular.module('ngify').config([ sam, module.exports ]);"
+            append: "angular.module('ngify').config([ 'sam', module.exports ]);"
         });
     });
 
     it('should produce correct output for run', function () {
         executeScenario({
             code: 'exports["@ng"]={type:"run", name:"test", inject:["sam"]};',
-            append: "angular.module('ngify').run([ sam, module.exports ]);"
+            append: "angular.module('ngify').run([ 'sam', module.exports ]);"
         });
     });
 
