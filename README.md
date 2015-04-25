@@ -25,9 +25,8 @@ to easily bulk load files.
 
 Install
 ---
-Install ngify locally and save in package.json:
 
-    npm install ngify --save-dev
+[![npm install ngify](https://nodei.co/npm/ngify.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/ngify)
 
 Add Ngify as a Browserify Transform
 ---
