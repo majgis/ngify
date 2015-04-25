@@ -12,11 +12,13 @@ to JavaScript using
 3. Provides true inversion of control by eliminating the hard Angular dependency
 from component declaration
 
+
 By fully realizing inversion of control, we have these benefits:
 
 * Execute tests faster on non-browser specific units
 * Share units between different frameworks
 * Facilitate migration to newer/different frameworks
+
 
 Use in conjunction with [require-globify](https://github.com/capaj/require-globify)
 to easily bulk load files.
@@ -104,9 +106,11 @@ Annotation Properties
 * The name given as the first argument to the Angular convenience method.
 * Not used for the run and config types.
 
+
 **type (Required)**
 
 * The Angular convenience method name.
+
 
 **inject (Optional when used)**
 
@@ -217,6 +221,7 @@ Here is a description of each setting:
     * The default object is completely overwritten with the custom arguments
     * See [html-minifier](https://www.npmjs.com/package/html-minifier) for supported options
 
+
 * jsExtension
     * How ngify identifies the JS files it will transform
     * As long as the file name ends with this suffix, it will be processed
@@ -224,8 +229,10 @@ Here is a description of each setting:
     * You can disable the JS functionality (all JS files will be ignored)
     by setting this value to false
 
+
 * jsAnnotation
     * The property name on module.exports that ngify uses to generate the Angular boilerplate
+
 
 * jsTemplates
     * Each template is matched using the jsAnnotation `type` property
