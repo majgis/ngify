@@ -1,7 +1,6 @@
 Description
 ---
-[Ngify](https://www.npmjs.com/package/ngify)
-is a
+[Ngify](https://www.npmjs.com/package/ngify) is a
 [Browserify](https://github.com/substack/node-browserify)
 transform that performs the following tasks:
 
@@ -9,19 +8,28 @@ transform that performs the following tasks:
 [Angular templates](https://docs.angularjs.org/guide/templates)
 to JavaScript using
 [$templateCache](https://docs.angularjs.org/api/ng/service/$templateCache).
-2. Eliminates Angular boilerplate by using annotations
+2. Eliminates need for managing Angular's minification syntax
+3. Provides true inversion of control by eliminating the hard Angular dependency
+from component declaration
 
+By fully realizing inversion of control, we have these benefits:
 
-Usage
+* Execute tests faster on non-browser specific units
+* Share units between different frameworks
+* Facilitate migration to newer/different frameworks
+
+Use in conjunction with [require-globify](https://github.com/capaj/require-globify)
+to easily bulk load files.
+
+Install
 ---
 Install ngify locally and save in package.json:
 
-
     npm install ngify --save-dev
 
-
+Add Ngify as a Browserify Transform
+---
 Configure browserify to use this transform in package.json:
-
 
       "browserify": {
         "transform": [
@@ -30,21 +38,41 @@ Configure browserify to use this transform in package.json:
       }
 
 
-When you require html or js files, they will be processed by ngify:
+Load HTML Files
+---
 
+Require an HTML file:
 
     require('./templates/angularTemplate.html');
-    require('./lib/myLib.js');
 
 Here is an example of the contents of angularTemplate.html:
-
 
     <div>
         {{value}}
     <div>
 
-Here is an example of the contents of  myLib.js:
+Ngify *replaces* the file contents with the following:
 
+    angular.module('ngify')
+        .run([
+            '$templateCache',
+            function($templateCache){
+                $templateCache.put(
+                    'angularTemplate.html',
+                    '<div> {{value}} </div>'
+                )
+            }
+         ])
+
+
+Load Plain Old JavaScript Objects (POJOs) with Annotations
+---
+
+Require a JavaScript file:
+
+    require('./lib/myLib.js');
+
+Here is an example of the contents of myLib.js:
 
     function MyCtrl (serviceName){
         this.message = 'Hello World!';
@@ -62,25 +90,50 @@ Here is an example of the contents of  myLib.js:
         inject: [ 'serviceName' ],
     }
 
-
-In the case of the HTML file, the file contents are replaced with
-a minified version of the following:
-
+Ngify *appends* the following code to the file contents:
 
     angular.module('ngify')
-        .run([
-            '$templateCache',
-            function($templateCache){
-                $templateCache.put(
-                    'angularTemplate.html',
-                    '<div> {{value}} </div>'
-                )
-            }
-         ])
+        .controller('myCtrl', [ 'serviceName', module.exports ])
 
 
-In the case of the JS file, the following is appended to the file contents:
+Annotation Properties
+---
 
+**name (Required when used)**
+
+* The name given as the first argument to the Angular convenience method.
+* Not used for the run and config types.
+
+**type (Required)**
+
+* The Angular convenience method name.
+
+**inject (Optional when used)**
+
+* The names of the injectables used in Angular's minification syntax.
+* Not used for value and constant types.
+* Here is an example of the contents of myLib.js without the optional inject
+property:
+
+
+    function MyCtrl (serviceName){
+        this.message = 'Hello World!';
+    }
+
+    MyCtrl.prototype.sayHello = function(){
+        console.log(this.message);
+    }
+
+    exports = module.exports = MyCtrl
+
+    exports['@ng'] = {
+        name: 'myCtrl',
+        type: 'controller',
+    }
+
+
+The injectable is read from the function signature and the following
+is appended to the file contents:
 
     angular.module('ngify')
         .controller('myCtrl', [ 'serviceName', module.exports ])
@@ -90,7 +143,6 @@ Configuration
 ---
 To change the default settings, you can configure ngify as follows
 (the defaults are shown):
-
 
       "browserify": {
         "transform": [
@@ -131,16 +183,20 @@ To change the default settings, you can configure ngify as follows
 
 Here is a description of each setting:
 
+
 * moduleName
     * This value replaces {moduleName} in the moduleTemplate
     * If you don't specify your own module name, you need to define the
     following angular module somewhere in your code:
 
+
         angular.module('ngify', [])
+
 
 * moduleTemplate
     * This template is prefixed to all other templates
     * {moduleName} is replaced with value specified
+
 
 * htmlExtension
     * How ngify identifies the HTML files it will transform
@@ -150,10 +206,12 @@ Here is a description of each setting:
     * You can disable the HTML functionality (all html files will be ignored)
     by setting this value to false.
 
+
 * htmlTemplate
     * This is the JavaScript output, with these tokens being replaced:
         * {templateName} - file name with extension
         * {html} - minified html file contents
+
 
 * htmlMinifyArgs
     * The default object is completely overwritten with the custom arguments
@@ -173,14 +231,11 @@ Here is a description of each setting:
     * Each template is matched using the jsAnnotation `type` property
 
 
-Additional Information for Trouble-shooting
----
-
-* Token replacements are done using [string-template](https://www.npmjs.com/package/string-template)
-
-
 Change Log
 ---
+
+**v1.1.0** - The inject annotation is now optional
+
 **v1.0.0** - Breaking changes to add support for annotations
 
   * The following configuration properties were renamed:
