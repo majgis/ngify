@@ -240,6 +240,7 @@ Here is a description of each setting:
 
 Change Log
 ---
+**v1.2.0** - The annotation statement is now removed.
 
 **v1.1.0** - The inject annotation is now optional
 
