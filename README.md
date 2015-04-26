@@ -10,7 +10,7 @@ to JavaScript using
 [$templateCache](https://docs.angularjs.org/api/ng/service/$templateCache).
 2. Eliminates need for managing Angular's minification syntax
 3. Provides true inversion of control by eliminating the hard Angular dependency
-from component declaration
+from component declaration by using annotations.
 
 
 By fully realizing inversion of control, we have these benefits:
@@ -92,7 +92,8 @@ Here is an example of the contents of myLib.js:
         inject: [ 'serviceName' ],
     }
 
-Ngify *appends* the following code to the file contents:
+The annotation statement is deleted and Ngify *appends* the
+following code to the file contents:
 
     angular.module('ngify')
         .controller('myCtrl', [ 'serviceName', module.exports ])
@@ -136,8 +137,8 @@ property:
     }
 
 
-The injectable is read from the function signature and the following
-is appended to the file contents:
+The injectable is read from the function signature, the annotation statement
+is deleted and the following is appended to the file contents:
 
     angular.module('ngify')
         .controller('myCtrl', [ 'serviceName', module.exports ])
