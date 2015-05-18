@@ -19,11 +19,18 @@ describe('NgifyJavaScriptStreamReader', function () {
 
     function executeScenario(scenario) {
         settings = new NgifySettings();
-        defaultReader = new StreamReader('/test/index.js', settings);
+        filename = scenario.filename || '/test/index.js';
+        defaultReader = new StreamReader(filename, settings);
         queue = [];
         defaultReader.write(stream, scenario.code);
         defaultReader.end(stream);
-        expect(queue[0]).toBe(scenario.code.split("exports[")[0] + '\n' + scenario.append);
+        var appendedCode;
+        if (scenario.append) {
+            appendedCode = '\n' + scenario.append;
+        } else {
+            appendedCode = '';
+        }
+        expect(queue[0]).toBe(scenario.code.split("exports[")[0] + appendedCode);
     }
 
     it('should output unaltered code when there is no annotation', function () {
@@ -53,29 +60,29 @@ describe('NgifyJavaScriptStreamReader', function () {
     describe('inject', function () {
         it('should work for a string literal', function () {
             executeScenario({
-                code: "exports['@ng']={type:'controller',inject:'test'};",
-                append: "angular.module('ngify').controller('', [ 'test', module.exports ] );"
+                code: "exports['@ng']={type:'controller',inject:'test', name:'test'};",
+                append: "angular.module('ngify').controller('test', [ 'test', module.exports ] );"
             })
         });
 
         it('should work for an array expression with no elements', function () {
             executeScenario({
-                code: "exports['@ng']={type:'controller',inject:[]};",
-                append: "angular.module('ngify').controller('', [ module.exports ] );"
+                code: "exports['@ng']={type:'controller',inject:[], name:'test'};",
+                append: "angular.module('ngify').controller('test', [ module.exports ] );"
             })
         });
 
         it('should work for an array expression with one element', function () {
             executeScenario({
-                code: "exports['@ng']={type:'controller',inject:['test']};",
-                append: "angular.module('ngify').controller('', [ 'test', module.exports ] );"
+                code: "exports['@ng']={type:'controller',inject:['test'], name:'test'};",
+                append: "angular.module('ngify').controller('test', [ 'test', module.exports ] );"
             })
         });
 
         it('should work for an array expression with two elements', function () {
             executeScenario({
-                code: "exports['@ng']={type:'controller',inject:['test', 'test2']};",
-                append: "angular.module('ngify').controller('', [ 'test', 'test2', module.exports ] );"
+                code: "exports['@ng']={type:'controller',inject:['test', 'test2'], name:'test'};",
+                append: "angular.module('ngify').controller('test', [ 'test', 'test2', module.exports ] );"
             })
         })
     });
@@ -230,5 +237,82 @@ describe('NgifyJavaScriptStreamReader', function () {
         });
 
     });
+
+    describe('file basename without type', function () {
+
+        it('should provide name if missing from annotation', function () {
+            executeScenario({
+                code: "exports['@ng']={type:'controller',inject:[]};",
+                append: "angular.module('ngify').controller('index', [ module.exports ] );"
+            })
+        });
+
+        it('should not provide name if present in annotation', function () {
+            executeScenario({
+                code: "exports['@ng']={type:'controller',inject:[], name:'test'};",
+                append: "angular.module('ngify').controller('test', [ module.exports ] );"
+            })
+        });
+
+        it('should do nothing if there is no annotation', function () {
+            executeScenario({
+                code: "module.exports={};",
+                append: null
+            })
+        });
+
+    });
+
+    describe('file basename with type', function () {
+
+        it('should provide name if missing from annotation', function () {
+            executeScenario({
+                code: "exports['@ng']={type:'controller',inject:[]};",
+                append: "angular.module('ngify').controller('name', [ module.exports ] );",
+                filename: "name.controller.js"
+            })
+        });
+
+        it('should not provide name if present in annotation', function () {
+            executeScenario({
+                code: "exports['@ng']={type:'controller',inject:[], name:'test'};",
+                append: "angular.module('ngify').controller('test', [ module.exports ] );",
+                filename: "name.controller.js"
+            })
+        });
+
+        it('should provide type if missing from annotation', function () {
+            executeScenario({
+                code: "exports['@ng']={inject:[], name:'test'};",
+                append: "angular.module('ngify').controller('test', [ module.exports ] );",
+                filename: "name.controller.js"
+            })
+        });
+
+        it('should not provide type if present in annotation', function () {
+            executeScenario({
+                code: "exports['@ng']={type:'controller',inject:[], name:'test'};",
+                append: "angular.module('ngify').controller('test', [ module.exports ] );",
+                filename: "name.value.js"
+            })
+        });
+
+        it('should provide name and type when there is an annotation without name and type',
+            function () {
+                executeScenario({
+                    code: "exports['@ng']={inject:[]};",
+                    append: "angular.module('ngify').controller('xxx', [ module.exports ] );",
+                    filename: "xxx.controller.js"
+                })
+            });
+
+        it('should provide name and type when there is no annotation', function () {
+            executeScenario({
+                code: "",
+                append: "angular.module('ngify').controller('xxx', [ module.exports ] );",
+                filename: "xxx.controller.js"
+            })
+        });
+    })
 
 });
