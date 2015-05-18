@@ -136,11 +136,44 @@ property:
     }
 
 
-The injectable is read from the function signature, the annotation statement
+The injectables are read from the function signature, the annotation statement
 is deleted and the following is appended to the file contents:
 
     angular.module('ngify')
         .controller('myCtrl', [ 'serviceName', module.exports ])
+
+File Name Parsing
+---
+Both the name and type can be taken from the file name, allowing annotations to be optional.  
+Annotation values always override the filename when they are present. Filename formats are as follows: 
+
+    <name>.<type>.js (annotation is optional)
+    <name>.js (annotation is required)
+
+For example, the following filename:
+
+    myCtrl.controller.js
+    
+and no annotation, will result in this output:
+
+    angular.module('ngify')
+        .controller('myCtrl', [ 'serviceName', module.exports ])
+
+The type can be omitted from the filename, but the annotation is required in this case:
+
+    myCtrl.js
+    
+plus this annotation:
+
+    exports['@ng'] = {
+      type: 'controller'
+    }
+    
+will provide the same output as above:
+    
+    angular.module('ngify')
+        .controller('myCtrl', [ 'serviceName', module.exports ])
+
 
 
 Configuration
@@ -240,7 +273,9 @@ Here is a description of each setting:
 
 Change Log
 ---
-**v1.2.0** - The annotation statement is now removed.
+**v1.3.0** - Annotations are now optional, with the name and type coming from the filename.
+
+**v1.2.0** - The annotation statements are now removed from the output
 
 **v1.1.0** - The inject annotation is now optional
 
