@@ -332,4 +332,15 @@ describe('NgifyJavaScriptStreamReader', function () {
         });
 
     });
+
+    describe('browserify-ngannotate compatibility', function(){
+
+        it('should not detect @ng annotation when /* @ngInject */ comment is present ', function(){
+            executeScenario({
+                code: "app.directive('bla', /* @ngInject */ function (serviceA){return templateUrl: require('../templates/test.html')};});",
+                append: ""
+            });
+        })
+
+    });
 });
