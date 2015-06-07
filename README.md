@@ -30,13 +30,41 @@ Install
 
 Add Ngify as a Browserify Transform
 ---
-Configure browserify to use this transform in package.json:
+[Configure browserify](https://github.com/substack/browserify-handbook#configuring-transforms)
+ to use this transform in package.json:
+
 
       "browserify": {
         "transform": [
           "ngify"
         ]
       }
+
+Configure browserify to use this transform in package.json with settings:
+
+
+      "browserify": {
+        "transform": [
+          [
+            "ngify",
+            {
+              moduleName: "test"
+            }
+          ]
+        ]
+      }
+
+Configure browserify to use this transform programmatically:
+
+
+    var b = browserify(options)
+       .transform(require('ngify'))
+
+Configure browserify to use this transform programmatically with settings:
+
+
+    var b = browserify()
+        .transform(require('ngify'), {moduleName: 'test'})
 
 
 Load HTML Files
