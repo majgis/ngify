@@ -313,6 +313,23 @@ describe('NgifyJavaScriptStreamReader', function () {
                 filename: "xxx.controller.js"
             })
         });
-    })
+    });
 
+    describe('annotations syntax', function(){
+
+        it('should work for single quotes on keys', function(){
+            executeScenario({
+                code: "function channel(){} exports = module.exports = channel; exports['@ng'] = {'type': 'controller', 'name': 'channel'};",
+                append: "angular.module('ngify').controller('channel', [ module.exports ] );"
+            });
+        });
+
+        it('should work for double quotes on keys', function(){
+            executeScenario({
+                code: "function channel(){} exports = module.exports = channel; exports['@ng'] = {\"type\": 'controller', \"name\": 'channel'};",
+                append: "angular.module('ngify').controller('channel', [ module.exports ] );"
+            });
+        });
+
+    });
 });
