@@ -302,6 +302,9 @@ Here is a description of each setting:
 
 Change Log
 ---
+**v1.4.1** - The name registered with Angular's $templateCache is now returned 
+from the require of html files
+
 **v1.3.0** - Annotations are now optional, with the name and type coming from the filename.
 
 **v1.2.0** - The annotation statements are now removed from the output
