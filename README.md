@@ -70,7 +70,8 @@ Configure browserify to use this transform programmatically with settings:
 Load HTML Files
 ---
 
-Require an HTML file:
+Require an HTML file (the name registered with Angular's $templateCache is 
+returned):
 
     require('./templates/angularTemplate.html');
 
