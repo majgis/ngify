@@ -42,7 +42,7 @@ describe('NgifyHtmlStreamReader', function () {
         var chunk = '<div>test</div>';
         customReader.write(stream, chunk);
         customReader.end(stream);
-        expect(queue[0]).toBe('ngify' + 'index.ng.h' + chunk);
+        expect(queue[0]).toBe('ngify' + 'index.ng.h' + chunk + '\nmodule.exports = \'' + 'index.ng.h\';');
     });
 
     it('outputs with minimized html', function () {
