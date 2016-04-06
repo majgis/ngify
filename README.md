@@ -302,6 +302,8 @@ Here is a description of each setting:
 
 Change Log
 ---
+**v1.5.1** - html-minifier v1.5.0
+
 **v1.4.1** - The name registered with Angular's $templateCache is now returned 
 from the require of html files
 
