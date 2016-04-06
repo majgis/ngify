@@ -20,7 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "falafel": "^1.0.1",
-    "html-minifier": "~0.6.9",
+    "html-minifier": "^1.4.0",
     "string-template": "~0.2.0",
     "through": "~2.3.6"
   },
