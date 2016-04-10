@@ -1,4 +1,5 @@
 var NgifySettings = require('../lib/NgifySettings');
+var CWD = process.cwd()
 
 describe('NgifySettings', function () {
 
@@ -59,4 +60,58 @@ describe('NgifySettings', function () {
             .toBe(args.htmlTemplate);
     });
 
+    it('htmlPath=true sets relative path for html name', function(){
+        var relativePath =  'a/b/c/123.html';
+        var filePath = CWD + '/' + relativePath;
+        args = {
+            htmlPath: true
+        };
+        var settings = new NgifySettings(filePath, args);
+        expect(settings.getValue('htmlName')).toBe(relativePath);
+    });
+
+    it('htmlPath="a/" sets modified relative path for html name', function(){
+        var filePath = CWD + '/a/b/c/123.html';
+        args = {
+            htmlPath: 'a/'
+        };
+        var settings = new NgifySettings(filePath, args);
+        expect(settings.getValue('htmlName')).toBe('b/c/123.html');
+    });
+
+    it('htmlPath="b/" sets modified relative path for html name', function(){
+        var filePath = CWD + '/a/b/c/123.html';
+        args = {
+            htmlPath: 'b/'
+        };
+        var settings = new NgifySettings(filePath, args);
+        expect(settings.getValue('htmlName')).toBe('a/c/123.html');
+    });
+
+    it('htmlPath=["b/"] sets modified relative path for html name', function(){
+        var filePath = CWD + '/a/b/c/123.html';
+        args = {
+            htmlPath: ['b/']
+        };
+        var settings = new NgifySettings(filePath, args);
+        expect(settings.getValue('htmlName')).toBe('a/c/123.html');
+    });
+
+    it('htmlPath=["b/", "c/"] sets mod rel path for html name', function(){
+        var filePath = CWD + '/a/b/c/123.html';
+        args = {
+            htmlPath: ['b/', 'c/']
+        };
+        var settings = new NgifySettings(filePath, args);
+        expect(settings.getValue('htmlName')).toBe('a/123.html');
+    });
+
+    it('htmlPath=["/b", "/c"] sets mod rel path for html name', function(){
+        var filePath = CWD + '/a/b/c/123.html';
+        args = {
+            htmlPath: ['/b', '/c']
+        };
+        var settings = new NgifySettings(filePath, args);
+        expect(settings.getValue('htmlName')).toBe('a/123.html');
+    });
 });

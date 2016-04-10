@@ -2,7 +2,7 @@ Description
 ---
 [Ngify](https://www.npmjs.com/package/ngify) is a
 [Browserify](https://github.com/substack/node-browserify)
-transform that performs the following tasks:
+transform that performs the following tasks for building Angular 1.x apps:
 
 1. Converts
 [Angular templates](https://docs.angularjs.org/guide/templates)
@@ -215,33 +215,34 @@ To change the default settings, you can configure ngify as follows
           [
             "ngify",
             {
-              moduleName: 'ngify',
-              moduleTemplate: "angular.module('{moduleName}')",
+              "moduleName": 'ngify',
+              "moduleTemplate": "angular.module('{moduleName}')",
 
-              htmlExtension: '.html',
-              htmlTemplate: ".run(['$templateCache', function($templateCache){$templateCache.put('{templateName}','{html}')}])",
-              htmlMinifyArgs: {
-                collapseWhitespace: true,
-                conservativeCollapse: true
+              "htmlExtension": ".html",
+              "htmlTemplate": ".run(['$templateCache', function($templateCache){$templateCache.put('{templateName}','{html}')}])",
+              "htmlPath": false,
+              "htmlMinifyArgs": {
+                "collapseWhitespace": true,
+                "conservativeCollapse": true
               },
 
-              jsExtension: '.js',
-              jsAnnotation: '@ng',
-              jsTemplates: {
+              "jsExtension": ".js",
+              "jsAnnotation": "@ng",
+              "jsTemplates": {
 
-                provider:   ".{type}('{name}', [ {inject}module.exports ] );",
-                factory:    ".{type}('{name}', [ {inject}module.exports ] );",
-                service:    ".{type}('{name}', [ {inject}module.exports ] );",
-                animation:  ".{type}('{name}', [ {inject}module.exports ] );",
-                filter:     ".{type}('{name}', [ {inject}module.exports ] );",
-                controller: ".{type}('{name}', [ {inject}module.exports ] );",
-                directive:  ".{type}('{name}', [ {inject}module.exports ] );",
+                "provider":   ".{type}('{name}', [ {inject}module.exports ] );",
+                "factory":    ".{type}('{name}', [ {inject}module.exports ] );",
+                "service":    ".{type}('{name}', [ {inject}module.exports ] );",
+                "animation":  ".{type}('{name}', [ {inject}module.exports ] );",
+                "filter":     ".{type}('{name}', [ {inject}module.exports ] );",
+                "controller": ".{type}('{name}', [ {inject}module.exports ] );",
+                "directive":  ".{type}('{name}', [ {inject}module.exports ] );",
 
-                value:    ".{type}('{name}', module.exports );",
-                constant: ".{type}('{name}', module.exports );",
+                "value":    ".{type}('{name}', module.exports );",
+                "constant": ".{type}('{name}', module.exports );",
 
-                config: ".{type}([ {inject}module.exports ]);",
-                run:    ".{type}([ {inject}module.exports ]);"
+                "config": ".{type}([ {inject}module.exports ]);",
+                "run":    ".{type}([ {inject}module.exports ]);"
               }
             }
           ]
@@ -256,7 +257,7 @@ Here is a description of each setting:
     following angular module somewhere in your code:
 
 
-        angular.module('ngify', [])
+    angular.module('ngify', [])
 
 
 * moduleTemplate
@@ -277,6 +278,15 @@ Here is a description of each setting:
     * This is the JavaScript output, with these tokens being replaced:
         * {templateName} - file name with extension
         * {html} - minified html file contents
+
+
+* htmlPath
+    * Set to false by default, you just get the file name
+    * If true, path is relative to the current working directory (cwd)
+    * If a string, relativePath.replace(string, '')
+    * If an array of strings, relativePath.replace(string, '') for each item in 
+    the array
+    * In the last two cases, managing the forward slashes is left up to you.
 
 
 * htmlMinifyArgs
@@ -302,6 +312,9 @@ Here is a description of each setting:
 
 Change Log
 ---
+
+**v1.6.0** - htmlPath option allows for prefixed html template
+
 **v1.5.2** - html-minifier v1.4.0
 
 **v1.4.1** - The name registered with Angular's $templateCache is now returned 
