@@ -287,7 +287,7 @@ Here is a description of each setting:
     * If an array of strings, relativePath.replace(string, '') for each item in 
     the array
     * Paths have forward slashes on all platforms
-    * In the last two cases, managing the removal forward slashes is up to you.
+    * Managing the removal forward slashes is up to you. 
 
 
 * htmlMinifyArgs
