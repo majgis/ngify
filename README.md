@@ -9,11 +9,10 @@ transform that performs the following tasks for building Angular 1.x apps:
 to JavaScript using
 [$templateCache](https://docs.angularjs.org/api/ng/service/$templateCache).
 2. Eliminates need for managing Angular's minification syntax
-3. Provides true inversion of control by eliminating the hard Angular dependency
-from component declaration by using annotations.
+3. Reduces Angular boilerplate
 
 
-By fully realizing inversion of control, we have these benefits:
+Ngify provides these benefits:
 
 * Execute tests faster on non-browser specific units
 * Share units between different frameworks
