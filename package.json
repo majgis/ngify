@@ -1,6 +1,6 @@
 {
   "name": "ngify",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Browserify transform for Angular 1.x",
   "keywords": [
     "browserify-transform",
