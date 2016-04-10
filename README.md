@@ -286,7 +286,8 @@ Here is a description of each setting:
     * If a string, relativePath.replace(string, '')
     * If an array of strings, relativePath.replace(string, '') for each item in 
     the array
-    * In the last two cases, managing the forward slashes is left up to you.
+    * Paths have forward slashes on all platforms
+    * In the last two cases, managing the removal forward slashes is up to you.
 
 
 * htmlMinifyArgs
@@ -315,9 +316,9 @@ Change Log
 
 **v1.6.0** - htmlPath option allows for prefixed html template
 
-**v1.5.2** - html-minifier v1.4.0
+**v1.5.0** - html-minifier v1.4.0
 
-**v1.4.1** - The name registered with Angular's $templateCache is now returned 
+**v1.4.0** - The name registered with Angular's $templateCache is now returned 
 from the require of html files
 
 **v1.3.0** - Annotations are now optional, with the name and type coming from the filename.
