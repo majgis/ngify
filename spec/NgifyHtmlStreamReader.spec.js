@@ -6,7 +6,7 @@ describe('NgifyHtmlStreamReader', function () {
         customReader,
         defaultReaderInvalid,
         customReaderInvalid,
-        stream={},
+        stream = {},
         queue,
         customSettings;
 
@@ -27,7 +27,7 @@ describe('NgifyHtmlStreamReader', function () {
         var customInvalidSettings = new NgifySettings(customInvalidPath, customArgs);
         customReaderInvalid = new NgifyHtmlStreamReader(customInvalidPath, customInvalidSettings);
         queue = [];
-        stream.queue = function(chunk) {
+        stream.queue = function (chunk) {
             queue.push(chunk);
         };
     });
@@ -57,6 +57,55 @@ describe('NgifyHtmlStreamReader', function () {
         var chunk = '<div';
         defaultReader.write(stream, chunk);
         defaultReader.end(stream);
-        expect(stream.emit).toHaveBeenCalledWith('error', jasmine.any(String));
+        expect(stream.emit).toHaveBeenCalledWith('error', {});
+    });
+
+    it('uses relative path for html template when htmlPath=true', function () {
+        var args = {
+            htmlPath: true
+        };
+        var relativePath = 'test/index.html';
+        var settingsPath = process.cwd() + '/' + relativePath;
+        var settings = new NgifySettings(settingsPath, args);
+        var reader = new NgifyHtmlStreamReader(settingsPath, settings);
+        var chunk = '<div>test</div>';
+        reader.write(stream, chunk);
+        reader.end(stream);
+        var pathInCode = "'test/index.html'";
+        expect(queue[0].lastIndexOf(pathInCode))
+            .toBe(queue[0].length - pathInCode.length - 1)
+    });
+
+    it('uses relative path for html template when htmlPath=string', function () {
+        var args = {
+            htmlPath: 'test/'
+        };
+        var relativePath = 'test/index.html';
+        var settingsPath = process.cwd() + '/' + relativePath;
+        var settings = new NgifySettings(settingsPath, args);
+        var reader = new NgifyHtmlStreamReader(settingsPath, settings);
+        var chunk = '<div>test</div>';
+        reader.write(stream, chunk);
+        reader.end(stream);
+        var pathInCode = "'index.html'";
+        expect(queue[0].lastIndexOf(pathInCode))
+            .toBe(queue[0].length - pathInCode.length - 1)
+    });
+
+    it('uses relative path for html template when htmlPath=[]', function () {
+        var args = {
+            htmlPath: ['test/', 'test3/']
+        };
+        var relativePath = 'test/test2/test3/index.html';
+        var settingsPath = process.cwd() + '/' + relativePath;
+        var settings = new NgifySettings(settingsPath, args);
+        var reader = new NgifyHtmlStreamReader(settingsPath, settings);
+        var chunk = '<div>test</div>';
+        reader.write(stream, chunk);
+        reader.end(stream);
+        var pathInCode = "'test2/index.html'";
+        expect(queue[0].lastIndexOf(pathInCode))
+            .toBe(queue[0].length - pathInCode.length - 1)
+        
     });
 });
